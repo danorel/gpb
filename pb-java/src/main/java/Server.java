@@ -7,10 +7,10 @@ public class Server {
             System.err.println("Usage: output file is absent in command line call");
             System.exit(-1);
         }
-        Message.UserMessage message = Message.UserMessage.newBuilder()
+        UserMessage message = UserMessage.newBuilder()
                 .setId(1)
                 .setTitle("Greetings from a friend")
-                .setDescription("Hello, it's me! Glad to see you!")
+                .setText("Hello, it's me! Glad to see you!")
                 .build();
         FileOutputStream output;
         try {
