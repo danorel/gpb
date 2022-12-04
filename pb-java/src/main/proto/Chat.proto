@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.danorel.chat;
+
+option java_outer_classname = "ChatProto";
+
+service Chat {
+  rpc SendMessage (Message) returns (Reply) {}
+}
+
+message Message {
+  int32 id = 1;
+  string title = 2;
+  optional string text = 3;
+}
+
+message Reply {
+  int32 id = 1;
+  string title = 2;
+  optional string emoji = 3;
+}
