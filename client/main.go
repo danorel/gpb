@@ -1,13 +1,15 @@
-package client
+package main
 
 import (
-	"context"
 	"flag"
+	"fmt"
 	"log"
-	"time"
+	"net"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	pb "proto/chat"
 )
 
 const (
@@ -19,22 +21,20 @@ var (
 	name = flag.String("name", defaultName, "Name to greet")
 )
 
+type server struct {
+	pb.UnimplementedGreeterServer
+}
+
 func main() {
 	flag.Parse()
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(*addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *addr))
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Fatalf("failed to listen: %v", err)
 	}
-	defer conn.Close()
-	c := pb.NewGreeterClient(conn)
-
-	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: *name})
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+	s := grpc.NewServer()
+	pb.RegisterGreeterServer(s, &server{})
+	log.Printf("server listening at %v", lis.Addr())
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
 	}
-	log.Printf("Greeting: %s", r.GetMessage())
 }
