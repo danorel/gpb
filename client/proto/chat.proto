@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-package proto;
-
-option go_package = "proto";
+option go_package = "github.com/danorel/gpb/client/proto";
 
 service Chat {
   rpc SendMessage (Message) returns (Reply) {}
