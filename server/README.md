@@ -7,8 +7,3 @@ Two options:
    - `mvn compile`
    - `mvn package`
    - `java -jar target/server-1.0.jar com.danorel.ServerApplication`
-
-Making a request to a grpc server looks like the following:
-```shell
-grpcurl --plaintext -d '{"id": 1,"title": "Hello from client!","text": "Boo!"}' localhost:9898 com.danorel.chat.Chat/SendMessage
-```
